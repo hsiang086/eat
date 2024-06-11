@@ -36,7 +36,7 @@ This will generate an executable `eat` in the `./bin` directory.
 Or you can run the installation script (for macOS only):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hsiang086/eat/v0.1.0/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/hsiang086/eat/main/install.sh | bash
 ```
 
 ## Usage
