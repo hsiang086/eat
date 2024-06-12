@@ -28,7 +28,7 @@ cd eat
 Build the project:
 
 ```bash
-mix escript.build
+make
 ```
 
 This will generate an executable `eat` in the `./bin` directory.

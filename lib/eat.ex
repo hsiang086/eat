@@ -19,7 +19,7 @@ defmodule Eat do
       end
 
     if Map.get(opts, :help, false) or files == [] do
-      print_help()
+      Help.print_help()
     else
       Enum.each(files, fn file -> concatenate(file, terminal_width, break_point) end)
     end
@@ -41,20 +41,14 @@ defmodule Eat do
     {Enum.into(opts, %{}), files}
   end
 
-  defp print_help do
-    IO.puts """
-    #{BColors.header}a cat clone with elixir magic.#{BColors.endc}\n
-    #{BColors.ok_blue}Usage: eat [options] [file ...]#{BColors.endc}\n
-    #{BColors.bold}#{BColors.underline}Options:#{BColors.endc}
-      #{BColors.ok_cyan}-h, --help  Show the help message.#{BColors.endc}
-      #{BColors.ok_cyan}-b, --break-point <n> (n must be odd and bigger than 5) Set the break point.#{BColors.endc}
-    """
-  end
-
   defp concatenate(file, terminal_width, break_point) do
     case File.read(file) do
       {:ok, content} ->
-        fancy(file, content, terminal_width, break_point)
+        if String.valid?(content) do
+          fancy(file, content, terminal_width, break_point)
+        else
+          fancy(file, "🚨 #{BColors.fail}File is not a valid UTF-8 file.#{BColors.endc} 🚨", terminal_width, break_point)
+        end
       {:error, reason} ->
         IO.puts "#{BColors.fail}Error reading #{file}: #{reason}#{BColors.endc}"
     end
@@ -64,7 +58,7 @@ defmodule Eat do
     PrettyPrinter.div_up(terminal_width, break_point)
     PrettyPrinter.format_file(file, break_point)
     PrettyPrinter.div_mid(terminal_width, break_point)
-    PrettyPrinter.format_content(content, break_point)
+    PrettyPrinter.format_content(content, terminal_width, break_point)
     PrettyPrinter.div_low(terminal_width, break_point)
   end
 end
